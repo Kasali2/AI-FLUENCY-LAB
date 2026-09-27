@@ -1,0 +1,210 @@
+@import "tailwindcss";
+
+/* -------------------------------------------------------------------------- */
+/* Design tokens                                                              */
+/* -------------------------------------------------------------------------- */
+
+@theme inline {
+  /* Surfaces — deep, cool, restrained. */
+  --color-ink-950: #05070d;
+  --color-ink-900: #0a0e18;
+  --color-ink-850: #0e1421;
+  --color-ink-800: #131a2b;
+  --color-ink-700: #1c2540;
+  --color-ink-600: #2a3557;
+
+  /* Text */
+  --color-mist-100: #eef1f8;
+  --color-mist-200: #ccd4e6;
+  --color-mist-300: #a6b1cc;
+  --color-mist-400: #7d89a8;
+
+  /* Accents */
+  --color-glow-300: #7fe6f5;
+  --color-glow-400: #4dd0e8;
+  --color-glow-500: #1fb1d1;
+  --color-iris-300: #c4b5fd;
+  --color-iris-400: #a78bfa;
+  --color-iris-500: #8b5cf6;
+  --color-mint-400: #4ade80;
+  --color-amber-400: #fbbf24;
+  --color-coral-400: #fb7185;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --radius-card: 1.25rem;
+
+  --animate-fade-up: fade-up 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 0.32s ease-out both;
+  --animate-pulse-soft: pulse-soft 2.4s ease-in-out infinite;
+  --animate-sweep: sweep 1.6s linear infinite;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Base                                                                       */
+/* -------------------------------------------------------------------------- */
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--color-ink-950);
+  color: var(--color-mist-100);
+  font-family: var(--font-sans);
+  /* Prevent iOS from inflating text in landscape. */
+  -webkit-text-size-adjust: 100%;
+}
+
+/* The subtle "laboratory" backdrop: two soft light sources over a fine grid. */
+.lab-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(
+      60rem 40rem at 12% -8%,
+      color-mix(in oklab, var(--color-glow-500) 14%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      50rem 36rem at 92% 4%,
+      color-mix(in oklab, var(--color-iris-500) 12%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent,
+      color-mix(in oklab, var(--color-ink-950) 92%, black)
+    );
+}
+
+.lab-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--color-mist-100) 5%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-mist-100) 5%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 3.5rem 3.5rem;
+  mask-image: radial-gradient(
+    80rem 60rem at 50% 0%,
+    black,
+    transparent 78%
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Focus visibility — never removed, only styled                              */
+/* -------------------------------------------------------------------------- */
+
+:where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-glow-400);
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-glow-400) 32%, transparent);
+  color: var(--color-mist-100);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Utilities                                                                  */
+/* -------------------------------------------------------------------------- */
+
+@utility balance {
+  text-wrap: balance;
+}
+
+@utility pretty {
+  text-wrap: pretty;
+}
+
+/* A hairline border that reads as glass rather than as a hard line. */
+@utility panel {
+  border: 1px solid color-mix(in oklab, var(--color-mist-100) 10%, transparent);
+  background: color-mix(in oklab, var(--color-ink-850) 82%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+@utility safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+/* -------------------------------------------------------------------------- */
+/* Reduced motion                                                             */
+/* -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Scrollbars, where they exist at all. */
+@media (pointer: fine) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-ink-600) transparent;
+  }
+}
